@@ -6,7 +6,9 @@
   "scripts": {
     "start:local": "nodemon --exec tsx app.ts",
     "debug:local": "node --inspect-brk app.ts",
-    "start:prod": "node app.ts"
+    "start:prod": "node app.ts",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix"
   },
   "author": "Srivatsan Srinivasa Raghavan",
   "license": "ISC",
@@ -31,6 +33,7 @@
   },
   "homepage": "http://srivatsanssr.com/",
   "devDependencies": {
+    "@eslint/js": "^10.0.1",
     "@types/cookie-parser": "^1.4.10",
     "@types/cors": "^2.8.19",
     "@types/express": "^5.0.6",
@@ -40,8 +43,10 @@
     "@types/passport": "^1.0.17",
     "@types/passport-local": "^1.0.38",
     "connect-redis": "^9.0.0",
+    "eslint": "^10.13.0",
     "redis": "^5.10.0",
     "tsx": "^4.23.15",
-    "typescript": "^7.0.2"
+    "typescript": "^5.8",
+    "typescript-eslint": "^8.71.2"
   }
 }
