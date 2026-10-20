@@ -3,15 +3,19 @@ import {
   saveTrackedInvModel,
   getInventoriesModel,
   getAvailableInventoryModel,
+  type IInventory,
 } from "../models/inventoryModel.js";
+import type { Request, Response, NextFunction } from "express";
+import type { IUser } from "../models/userModel.js";
 
-export async function addToInventory(req, res, next) {
+export async function addToInventory(req: Request<unknown, unknown, { careTakenOf: { name: string; id: string}; inventoryType: string; inventoryBrand: string; inventoryForm: string; inventoryCount: number; inventoryEachContains: number;}>, res: Response, next: NextFunction) {
   try {
-    let addedTime = moment().format("MM/DD/YYYY HH:mm:ss");
+    const user = req.user as IUser;
+    const addedTime = moment().format("MM/DD/YYYY HH:mm:ss");
     const inventoryTotal =
       req.body.inventoryCount * req.body.inventoryEachContains;
-    const insertQuery = {
-      care_giver: req.user.user_email,
+    const insertQuery: IInventory = {
+      care_giver: user.user_email,
       care_taken_of_name: req.body.careTakenOf.name,
       care_taken_of_id: req.body.careTakenOf.id,
       inventory_type: req.body.inventoryType,
@@ -30,10 +34,11 @@ export async function addToInventory(req, res, next) {
   }
 }
 
-export async function getInventories(req, res, next) {
+export async function getInventories(req: Request<unknown, unknown, unknown, { careTakenId: string; }>, res: Response, next: NextFunction) {
   try {
+    const user = req.user as IUser;
     const getInventories = await getInventoriesModel({
-      care_giver: req.user.user_email,
+      care_giver: user.user_email,
       care_taken_of_id: req.query.careTakenId,
     });
     res.status(200).json(getInventories);
@@ -42,10 +47,11 @@ export async function getInventories(req, res, next) {
   }
 }
 
-export async function getAvailableInventory(req, res, next) {
+export async function getAvailableInventory(req: Request<unknown, unknown, unknown, { careTakenId: string; inventoryType: string; }>, res: Response, next: NextFunction) {
   try {
+    const user = req.user as IUser;
     const getAvlInventory = await getAvailableInventoryModel({
-      care_giver: req.user.user_email,
+      care_giver: user.user_email,
       care_taken_of_id: req.query.careTakenId,
       inventory_type: req.query.inventoryType,
       $expr: { $gt: ["$inventory_total", "$inventory_used"] },

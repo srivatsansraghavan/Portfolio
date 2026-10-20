@@ -12,7 +12,7 @@ import type { Request, Response, NextFunction } from "express";
 export async function saveTrackedExcretion(req: Request, res: Response, next: NextFunction) {
   try {
     const user = req.user as IUser;
-    let excTime = moment().format("MM/DD/YYYY HH:mm:ss");
+    const excTime = moment().format("MM/DD/YYYY HH:mm:ss");
     const insertQuery = {
       care_giver: user.user_email,
       care_taken_of_name: req.body.careTakenOf.name,

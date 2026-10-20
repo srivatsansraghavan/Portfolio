@@ -3,30 +3,34 @@ import {
   saveTrackedMedModel,
   getMedicationModel,
   deleteMedicationModel,
+  type IMedication,
 } from "../models/medicationModel.js";
 import {
   getInventoriesModel,
   updateInventoryModel,
 } from "../models/inventoryModel.js";
+import type { IUser } from "../models/userModel.js";
+import type { Request, Response, NextFunction } from "express";
 
-export async function saveTrackedMedications(req, res, next) {
+export async function saveTrackedMedications(req: Request<unknown, unknown, { careTakenOf: { name: string; id: string}; medicineQuantity: string; medicineId: string;}>, res: Response, next: NextFunction) {
   try {
-    let medTime = moment().format("MM/DD/YYYY HH:mm:ss");
+    const user = req.user as IUser;
+    const medTime = moment().format("MM/DD/YYYY HH:mm:ss");
     const invMedDetails = await getInventoriesModel({
       _id: req.body.medicineId,
     });
-    const insertQuery = {
-      care_giver: req.user.user_email,
+    const insertQuery: IMedication = {
+      care_giver: user.user_email,
       care_taken_of_name: req.body.careTakenOf.name,
       care_taken_of_id: req.body.careTakenOf.id,
-      medicine_name: invMedDetails[0].inventoryBrand,
-      medicine_form: invMedDetails[0].inventoryForm,
+      medicine_name: invMedDetails[0]?.inventoryBrand as string,
+      medicine_form: invMedDetails[0]?.inventoryForm as string,
       medicine_quantity: req.body.medicineQuantity,
       medicine_id: req.body.medicineId,
       medication_time: medTime,
     };
     const saveTrackedMed = await saveTrackedMedModel(insertQuery);
-    if (saveTrackedMed.hasOwnProperty("_id")) {
+    if (saveTrackedMed._id) {
       await updateInventoryModel(
         { _id: req.body.medicineId },
         { $inc: { inventory_used: req.body.medicineQuantity } }
@@ -44,10 +48,11 @@ export async function saveTrackedMedications(req, res, next) {
   }
 }
 
-export async function getMedicationDetails(req, res, next) {
+export async function getMedicationDetails(req: Request<unknown, unknown, unknown, { careTakenId: string; }, Record<string, unknown>>, res: Response, next: NextFunction) {
   try {
+    const user = req.user as IUser;
     const getTrackedMedication = await getMedicationModel({
-      care_giver: req.user.user_email,
+      care_giver: user.user_email,
       care_taken_of_id: req.query.careTakenId,
     });
     res.status(200).json(getTrackedMedication);
@@ -56,12 +61,16 @@ export async function getMedicationDetails(req, res, next) {
   }
 }
 
-export async function deleteMedication(req, res, next) {
+export async function deleteMedication(req: Request<{ medId: string; }>, res: Response, next: NextFunction) {
   try {
     const getMedDetails = await getMedicationModel({ _id: req.params.medId });
-    if (Object.keys(getMedDetails).length > 0) {
-      const medQuantity = getMedDetails.medicine_quantity;
-      const medId = getMedDetails.medicine_id;
+    if (getMedDetails && getMedDetails.length) {
+      const medDetail = getMedDetails.find((medDetail) => medDetail.medicine_id === req.params.medId);
+      if(!medDetail) {
+        throw new Error('No Medicine entry available');
+      }
+      const medQuantity = medDetail.medicine_quantity;
+      const medId = medDetail.medicine_id;
       await updateInventoryModel(
         { _id: medId },
         { $inc: { inventory_used: -medQuantity } }
@@ -84,7 +93,7 @@ export async function deleteMedication(req, res, next) {
   }
 }
 
-export async function getMedForId(req, res, next) {
+export async function getMedForId(req: Request<{ medId: string; }>, res: Response, next: NextFunction) {
   try {
     const getMedForId = await getMedicationModel({
       _id: req.params.medId,
@@ -95,13 +104,13 @@ export async function getMedForId(req, res, next) {
   }
 }
 
-export async function getMedForm(req, res, next) {
+export async function getMedForm(req: Request<{ medId: string; }>, res: Response, next: NextFunction) {
   try {
     const getInvForMed = await getInventoriesModel({
       _id: req.params.medId,
     });
     if (getInvForMed.length) {
-      res.status(200).send(getInvForMed[0].inventoryForm);
+      res.status(200).send(getInvForMed[0]?.inventoryForm);
     } else {
       res.status(404).send({
         message: "Unable to get inventory form. Please try again later!",

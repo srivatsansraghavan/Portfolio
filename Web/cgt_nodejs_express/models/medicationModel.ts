@@ -1,9 +1,33 @@
+import { model, type DeleteResult, type Mongoose, type PassportLocalDocument, type PassportLocalModel, type PassportLocalSchema, type RootFilterQuery } from "mongoose";
 import { connectToMongoDB, cgtdbEnv } from "../config.js";
 
-async function getMedSchema() {
-  const medTable = await connectToMongoDB(cgtdbEnv[process.env.NODE_ENV]);
+export interface IMedication {
+  care_giver: string;
+  care_taken_of_name: string;
+  care_taken_of_id: string;
+  medicine_name: string;
+  medicine_form: string;
+  medicine_quantity: string;
+  medicine_id: string;
+  medication_time: string;
+}
+export interface IMedicationResponse extends IMedication {
+  _id: string;
+}
+type MedicationSchema = IMedication & PassportLocalDocument;
+type MedicationModel = PassportLocalModel<MedicationSchema>;
+async function getMedSchema(): Promise<PassportLocalSchema<MedicationSchema, MedicationModel>> {
+   const nodeEnv = process.env.NODE_ENV as keyof typeof cgtdbEnv;
+    if (!nodeEnv) {
+      throw new Error('NODE_ENV not available.')
+    }
+    const medTable: Mongoose | undefined = await connectToMongoDB(cgtdbEnv[nodeEnv]);
+  
+    if (!medTable) {
+      throw new Error('Medication table not returned');
+    }
 
-  const medSchema = await medTable.Schema({
+  const medSchema: PassportLocalSchema<MedicationSchema, MedicationModel> = new medTable.Schema({
     care_giver: {
       type: String,
       required: [true, "Care Giver Id is required"],
@@ -36,26 +60,23 @@ async function getMedSchema() {
     },
   });
 
-  return (
-    medTable.models["tbl_medication"] ||
-    medTable.model("tbl_medication", medSchema)
-  );
+  return medSchema;
 }
 
-export const saveTrackedMedModel = async function (query) {
-  const medModel = await getMedSchema();
+export const saveTrackedMedModel = async function (query: IMedication): Promise<IMedicationResponse> {
+  const medModel = model<MedicationSchema, MedicationModel>('tbl_medication', await getMedSchema());
   const addedMed = await new medModel(query).save();
   return JSON.parse(JSON.stringify(addedMed));
 };
 
-export const deleteMedicationModel = async function (finder) {
-  const medModel = await getMedSchema();
+export const deleteMedicationModel = async function (finder: RootFilterQuery<{ _id: string}>): Promise<DeleteResult> {
+  const medModel = model<MedicationSchema, MedicationModel>('tbl_medication', await getMedSchema());
   const deleteMed = await medModel.deleteOne(finder).exec();
   return deleteMed;
 };
 
-export const getMedicationModel = async function (finder) {
-  const medModel = await getMedSchema();
+export const getMedicationModel = async function (finder: RootFilterQuery<{ _id: string }>): Promise<IMedication[]> {
+  const medModel = model<MedicationSchema, MedicationModel>('tbl_medication', await getMedSchema());
   const getMedForId = await medModel.find(finder, null).exec();
   return getMedForId;
 };

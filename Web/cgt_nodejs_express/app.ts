@@ -1,8 +1,6 @@
-import express, { type NextFunction, type Request, type Response } from "express";
+import express, { type Request, type Response } from "express";
 const app = express();
 import cors from "cors";
-import pkg from "body-parser";
-const { json } = pkg;
 import cookieParser from "cookie-parser";
 import session from "express-session";
 import passport from "passport";
@@ -77,7 +75,7 @@ app.use("/inventory", inventory);
 app.use("/medication", medication);
 app.use("/base", base);
 
-app.use((err: MongoServerError, req: Request, res: Response, next: NextFunction) => {
+app.use((err: MongoServerError, req: Request, res: Response) => {
   if (err.name === "MongoServerError") {
     if (err.code === 11000) {
       return res.status(409).json({ message: 'Duplicate values found' });

@@ -1,9 +1,76 @@
+import { model, type Mongoose, type PassportLocalDocument, type PassportLocalModel, type PassportLocalSchema, type RootFilterQuery } from "mongoose";
 import { connectToMongoDB, cgtdbEnv } from "../config.js";
+export interface IFeed {
+  feed_giver: string;
+  feed_taker_name: string;
+  feed_taker_id: string;
+  feed_taken_type: string;
+  feed_taken_mode: string;
+  feed_taken_side: string;
+  feed_taken_time: number;
+  feed_quantity: number;
+  feed_start_time: string;
+  feed_end_time: string;
+  is_pumped_feed: boolean;
+  is_feed_given: boolean;
+}
+export interface IPumped {
+  pumped_by: string;
+  pumped_for_name: string;
+  pumped_for_id: string;
+  pumped_mode: string;
+  pumped_side: string;
+  pumped_time: number;
+  pumped_quantity: number;
+  pump_start_time: string;
+  pump_end_time: string;
+}
+export interface IFeedResponse {
+  _id: string;
+  feedGiver: string;
+  feedTakerName: string;
+  feedTakerId: string;
+  feedTakenType: string;
+  feedTakenMode: string;
+  feedTakenSide: string;
+  feedTakenTime: number;
+  feedQuantity: number;
+  feedStartTime: string;
+  feedEndTime: string;
+  isPumpedFeed: boolean;
+  isFeedGiven: boolean;
+}
 
+export interface IPumpedResponse {
+  _id: string;
+  feedGiver: string;
+  feedTakerName: string;
+  feedTakerId: string;
+  feedTakenType: string;
+  feedTakenMode: string;
+  feedTakenSide: string;
+  feedTakenTime: number;
+  feedQuantity: number;
+  feedStartTime: string;
+  feedEndTime: string;
+  isPumpedFeed: boolean;
+  isFeedGiven: boolean;
+}
+type FeedSchema = IFeed & PassportLocalDocument;
+type FeedModel = PassportLocalModel<FeedSchema>;
 async function getFeedSchema() {
-  const feedTable = await connectToMongoDB(cgtdbEnv[process.env.NODE_ENV]);
+    const nodeEnv = process.env.NODE_ENV as keyof typeof cgtdbEnv;
+    if (!nodeEnv) {
+      throw new Error('NODE_ENV not available.')
+    }
+    const feedTable: Mongoose | undefined = await connectToMongoDB(cgtdbEnv[nodeEnv]);
+  
+    if (!feedTable) {
+      throw new Error('Feed table not returned');
+    }
+  
 
-  const feedSchema = await feedTable.Schema({
+  const feedSchema: PassportLocalSchema<FeedSchema, FeedModel> = new feedTable.Schema({
     feed_giver: {
       type: String,
       required: [true, "Care Giver Id is required"],
@@ -50,16 +117,23 @@ async function getFeedSchema() {
     },
   });
 
-  return (
-    feedTable.models["tbl_feeding"] ||
-    feedTable.model("tbl_feeding", feedSchema)
-  );
+  return feedSchema;
 }
 
+type PumpedSchema = IPumped & PassportLocalDocument;
+type PumpedModel = PassportLocalModel<PumpedSchema>;
 async function getPumpedSchema() {
-  const pumpedTable = await connectToMongoDB(cgtdbEnv[process.env.NODE_ENV]);
+  const nodeEnv = process.env.NODE_ENV as keyof typeof cgtdbEnv;
+  if (!nodeEnv) {
+    throw new Error('NODE_ENV not available.')
+  }
+  const pumpedTable: Mongoose | undefined = await connectToMongoDB(cgtdbEnv[nodeEnv]);
 
-  const pumpedSchema = await pumpedTable.Schema({
+  if (!pumpedTable) {
+    throw new Error('Feed table not returned');
+  }
+  
+  const pumpedSchema: PassportLocalSchema<PumpedSchema, PumpedModel> = new pumpedTable.Schema({
     pumped_by: {
       type: String,
       required: [true, "Care Giver Email is required"],
@@ -96,26 +170,23 @@ async function getPumpedSchema() {
     },
   });
 
-  return (
-    pumpedTable.models["tbl_feeding"] ||
-    pumpedTable.model("tbl_feeding", pumpedSchema)
-  );
+  return pumpedSchema;
 }
 
-export const saveTrackedFeedModel = async function (query) {
-  const feedModel = await getFeedSchema();
+export const saveTrackedFeedModel = async function (query: IFeed): Promise<IFeedResponse> {
+  const feedModel = model<FeedSchema, FeedModel>('tbl_feeding', await getFeedSchema());
   const addedFeed = await new feedModel(query).save();
   return JSON.parse(JSON.stringify(addedFeed));
 };
 
-export const savePumpedModel = async function (query) {
-  const pumpedModel = await getPumpedSchema();
+export const savePumpedModel = async function (query: IPumped): Promise<IPumpedResponse> {
+  const pumpedModel = model<PumpedSchema, PumpedModel>('tbl_feeding', await getPumpedSchema());
   const pumpedFeed = await new pumpedModel(query).save();
   return JSON.parse(JSON.stringify(pumpedFeed));
 };
 
-export const saveFeedForPumpedModel = async function (finder, updated) {
-  const feedModel = await getFeedSchema();
+export const saveFeedForPumpedModel = async function (finder: RootFilterQuery<{ _id: string}>, updated: IFeed) {
+  const feedModel = model<FeedSchema, FeedModel>('tbl_feeding', await getFeedSchema());
   const updatedFeed = await feedModel.findOneAndUpdate(
     finder,
     { $set: updated },
@@ -127,11 +198,11 @@ export const saveFeedForPumpedModel = async function (finder, updated) {
 };
 
 export const getFeedDetailsModel = async function (
-  care_giver,
-  care_taken_of_id,
-  feed_count
+  care_giver: string,
+  care_taken_of_id: string,
+  feed_count: number
 ) {
-  const feedModel = await getFeedSchema();
+  const feedModel = model<FeedSchema, FeedModel>('tbl_feeding', await getFeedSchema());
   const getFeedDetails = await feedModel
     .find(
       {
@@ -163,10 +234,10 @@ export const getFeedDetailsModel = async function (
 };
 
 export const getPumpedDetailsModel = async function (
-  care_giver_email,
-  care_taken_of_id
+  care_giver_email: string,
+  care_taken_of_id: string
 ) {
-  const pumpedModel = await getPumpedSchema();
+  const pumpedModel = model<PumpedSchema, PumpedModel>('tbl_feeding', await getPumpedSchema());
   const getPumpedDetails = await pumpedModel
     .find(
       {
@@ -193,8 +264,8 @@ export const getPumpedDetailsModel = async function (
     }));
 };
 
-export const deleteTrackedFeedModel = async function (feedId) {
-  const feedModel = await getFeedSchema();
+export const deleteTrackedFeedModel = async function (feedId: string) {
+  const feedModel = model<FeedSchema, FeedModel>('tbl_feeding', await getFeedSchema());
   const deleteFeed = await feedModel
     .deleteOne({
       _id: feedId,
@@ -203,8 +274,8 @@ export const deleteTrackedFeedModel = async function (feedId) {
   return deleteFeed;
 };
 
-export const getFeedByIdModel = async function (feedId) {
-  const feedModel = await getFeedSchema();
+export const getFeedByIdModel = async function (feedId: string) {
+  const feedModel = model<FeedSchema, FeedModel>('tbl_feeding', await getFeedSchema());
   const getFeedById = await feedModel
     .findOne({
       _id: feedId,
@@ -213,8 +284,9 @@ export const getFeedByIdModel = async function (feedId) {
   return getFeedById;
 };
 
-export const saveEditedFeedModel = async function (finder, updated) {
-  const feedModel = await getFeedSchema();
+export const saveEditedFeedModel = async function (finder: RootFilterQuery<{ _id: string; }>, updated: { feed_quantity: number;
+      feed_start_time: string; feed_end_time: string; feed_taken_time: number; }): Promise<IFeedResponse> {
+  const feedModel = model<FeedSchema, FeedModel>('tbl_feeding', await getFeedSchema());
   const editedFeed = await feedModel.findOneAndUpdate(
     finder,
     { $set: updated },

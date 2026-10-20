@@ -1,6 +1,5 @@
 import { Router } from "express";
 const router = Router();
-import passport from "passport";
 import { loginUser, addUser, logoutUser, isLoggedInUser } from "../controllers/userController.js";
 import { isAuthenticated } from "../utils.js";
 
