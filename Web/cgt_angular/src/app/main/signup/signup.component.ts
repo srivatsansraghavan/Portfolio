@@ -13,6 +13,7 @@ import { AuthService } from "src/app/shared/auth.service";
 })
 export class SignupComponent implements OnInit {
     @Output() closeModal = new EventEmitter<boolean>();
+    @Output() openLogin = new EventEmitter<boolean>();
     signUpForm: FormGroup;
     num1: number;
     num2: number;
@@ -108,5 +109,10 @@ export class SignupComponent implements OnInit {
         const signUpFullName = this.signUpForm.get('signUpFullName').value;
         this.authService.signUpUser(signUpEmail, signUpPassword, signUpFullName);
         this.closeModal.emit(true);
+    }
+
+    openLoginModal() {
+        this.closeModal.emit(true);
+        this.openLogin.emit(true);
     }
 }

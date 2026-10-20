@@ -11,6 +11,7 @@ import { AuthService } from "src/app/shared/auth.service";
 })
 export class LoginComponent implements OnInit {
     @Output() closeModal = new EventEmitter<boolean>();
+    @Output() openSignUp = new EventEmitter<boolean>();
     loginForm: FormGroup;
 
     constructor(private authService: AuthService) { }
@@ -27,5 +28,10 @@ export class LoginComponent implements OnInit {
         const loginPassword = this.loginForm.get('loginPassword').value;
         this.authService.loginUser(loginEmail, loginPassword);
         this.closeModal.emit(true);
+    }
+
+    openSignupModal() {
+        this.closeModal.emit(true);
+        this.openSignUp.emit(true);
     }
 }
