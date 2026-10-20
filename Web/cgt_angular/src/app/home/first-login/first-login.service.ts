@@ -40,9 +40,7 @@ export class FirstLoginService {
             'bg-success text-light role-addition-toast',
             true
           );
-          this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
-            this.router.navigate(['home'], { state: { isFirstLogin: false } });
-          });
+          this.router.navigate(['home'], { state: { isFirstLogin: false } });
         },
         error: () => {
           this.toastService.show(

@@ -3,7 +3,7 @@ import "dotenv/config";
 export async function connectToMongoDB(dbName: string): Promise<Mongoose | undefined> {
   try {
     pluralize(null);
-    return await connect(`${process.env.MONGO_URL}/${dbName}?authMechanism=DEFAULT&authSource=admin`);
+    return await connect(`${process.env.MONGO_URL}/${dbName}?authMechanism=DEFAULT&authSource=admin&directConnection=true`);
   } catch (err) {
     console.error(err);
   }

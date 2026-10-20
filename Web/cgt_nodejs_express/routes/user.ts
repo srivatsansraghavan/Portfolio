@@ -5,7 +5,7 @@ import { loginUser, addUser, logoutUser, isLoggedInUser } from "../controllers/u
 import { isAuthenticated } from "../utils.js";
 
 router.post("/add-user", addUser);
-router.post("/login-user", passport.authenticate('local'), loginUser)
+router.post("/login-user", loginUser)
 router.get("/is-user-loggedin", isLoggedInUser)
 router.delete("/logout-user", isAuthenticated, logoutUser)
 

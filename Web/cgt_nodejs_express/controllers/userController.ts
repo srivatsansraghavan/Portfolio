@@ -2,6 +2,7 @@ import { userModel, type IUser } from "../models/userModel.js";
 import { firstLoginModel } from "../models/caretakenModel.js";
 import type { NextFunction, Request, Response } from "express";
 import type { PassportLocalDocument } from "mongoose";
+import passport from "passport";
 
 export async function addUser(req: Request, res: Response, next: NextFunction) {
   try {
@@ -23,21 +24,33 @@ export async function addUser(req: Request, res: Response, next: NextFunction) {
 }
 
 export async function loginUser(req: Request<IUser>, res: Response, next: NextFunction) {
-  try {
-    const user = req.user as IUser;
+  passport.authenticate("local", async (err: any, user: IUser, info: { name: string; message: string }) => {
+    if(err) {
+      console.log("Auth error:", err);
+      return next(err);
+    }
 
-    const hasUserCareTaken = await firstLoginModel(user.user_email);
-    res.json({
-      firstLogin: hasUserCareTaken === 0,
-      user: {
-        userEmail: user.user_email,
-        userFullname: user.user_fullname,
-        userName: user.username,
+    if(!user) {
+      return res.status(401).json({
+        message: info?.message
+      });
+    }
+    req.logIn(user, async (err) => {
+      if(err){
+        return next(err);
       }
-    });
-  } catch (err) {
-    return next(err);
-  }
+  
+      const hasUserCareTaken = await firstLoginModel(user.user_email);
+      res.json({
+        firstLogin: hasUserCareTaken === 0,
+        user: {
+          userEmail: user.user_email,
+          userFullname: user.user_fullname,
+          userName: user.username,
+        }
+      });
+    })
+  })(req, res, next);
 }
 
 export async function logoutUser(req: Request, res: Response, next: NextFunction) {

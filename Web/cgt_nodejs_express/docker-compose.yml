@@ -3,3 +3,8 @@
       image: redis:alpine
       ports:
         - '6379:6379'
+    mongodb:
+      image: mongodb/mongodb-atlas-local
+      hostname: mongodb
+      ports:
+        - 27017:27017
