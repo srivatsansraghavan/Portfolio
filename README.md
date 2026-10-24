@@ -6,7 +6,7 @@ Welcome to my portfolio. To showcase my knowledge of Angular and NodeJS developm
 ## Caregiver Tracker
 
 This website is used to track the care given by caregiver to someone who needs to be taken care of.
-As of V1.0, one can create an account and then login. Users logging in for the first time will be requested to add details of person they want to support physically. Authenticated user can then track feeds given, medicines given, excretion details tracked and log medicines and other care items under Inventory.
+As of V1.0.0, one can create an account and then login. Users logging in for the first time will be requested to add details of person they want to support physically. Authenticated user can then track feeds given, medicines given, excretion details tracked and log medicines and other care items under Inventory.
 
 ### Tech Stack used
 Frontend: Angular v18
