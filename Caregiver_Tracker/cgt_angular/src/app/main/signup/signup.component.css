@@ -1,0 +1,48 @@
+.modal-header .modal-title {
+    text-align: center;
+    margin: 0 auto;
+}
+
+.modal-body .form-group {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    justify-content: center;
+    grid-template-rows: 60px auto;
+    gap: 12px;
+
+    .signup-form-error {
+        right: 16px;
+        margin: 8px;
+        color: red;
+    }
+
+    div label {
+        font-weight: 500;
+        justify-content: center;
+    }
+
+    div input.ng-invalid.ng-touched {
+        border: 1px solid red;
+    }
+}
+
+.modal-footer {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+
+    .form-group button {
+        margin: 12px;
+    }
+
+    a {
+        text-decoration: underline;
+        color: blue;
+
+        &:hover {
+            text-decoration: underline;
+            cursor: pointer;
+            color:blueviolet;
+        }
+    }
+}

@@ -1,0 +1,33 @@
+<div class="main-container">
+    <div class="emp-name">{{ name }}</div>
+    <div class="emp-title">{{ title }}</div>
+    <div class="emp-linkedin"><a [href]="linkedinUrl" target="_blank" rel="noopened noreferrer"><img src="../../../assets/LI-Logo.png" width="100px" height="50px"></a></div>
+    <div class="emp-summary-container">
+        <div class="emp-summary">
+            <div class="content">
+                <p>{{ summary }}</p>
+            </div>
+        </div>
+    </div>
+    @if(showExperienceDetail) {
+            <div class="emp-work-experience" role="button" (click)="hideDetail()" (keydown)="hideDetail()" (keyup.enter)="hideDetail()" tabindex="0">
+                <h3>Experience Detail - {{ workEmployer }}</h3>
+                <ul>
+                    @for(detail of workExperienceDetail; track detail) {
+                        <li>{{ detail }}</li>
+                    }
+                </ul>
+        </div>
+        } @else {
+            <div class="employer-grid">
+                @for(workExp of workExperience; track workExp) {
+                    <app-experience-card
+                        [employer]="workExp.employer"
+                        [designation]="workExp.designation"
+                        [dateEmployed]="workExp.dateEmployed"
+                        >
+                    </app-experience-card>
+                }
+            </div>
+        }
+</div>

@@ -1,0 +1,79 @@
+.home-header {
+    width: 100%;
+    max-width: 100%;
+    font-family: 'Gill Sans', 'Gill Sans MT', 'Trebuchet MS', sans-serif;
+    font-size: 50px;
+    font-style: oblique;
+    font-variant: small-caps;
+    font-stretch: expanded;
+    color: rebeccapurple;
+    text-align: center;
+}
+
+.navbar {
+    display: flex;
+    background: radial-gradient(circle at 0% 30%, #0097b2 0%, transparent 40%),
+        radial-gradient(circle at 40% 80%, #a1c4fd 0%, transparent 40%),
+        linear-gradient(135deg, #0097b2 20%, #0097b2 100%);
+    justify-content: flex-end;
+}
+
+.navbar button {
+    background: linear-gradient(135deg, #0097b2 20%, #0097b2 100%);
+    ;
+    border: none;
+}
+
+.navbar button:hover {
+    background-color: #E2E8F0;
+    border: 1px;
+}
+
+label {
+    display: inline-block;
+    max-width: 70%;
+    padding: 2%;
+    justify-content: right;
+}
+
+input {
+    display: inline-block;
+    width: 100%;
+    max-width: 90%;
+    margin: 2%;
+}
+
+input.ng-invalid.ng-touched {
+    border: 1px solid red;
+}
+
+.add-verify {
+    width: 15%;
+}
+
+.signup-form-error {
+    display: block;
+    padding-left: 5%;
+    color: red;
+}
+
+modal-footer {
+    width: 100%;
+    max-width: 100%;
+}
+
+modal-footer button {
+    display: inline-block;
+    margin: 0;
+    width: 20%;
+}
+
+.tech-stack {
+    border: 1;
+    border-radius: 30%;
+    border-style: dashed;
+    width: 100%;
+    tr {
+        border: 1px dotted;
+    }
+}

@@ -1,9 +1,0 @@
-import { type NextFunction, type Request, type Response } from "express"
-export const isAuthenticated = (req: Request, res: Response, next: NextFunction) => {
-  console.log("req", req)
-  if (req.isAuthenticated()) {
-    return next()
-  }
-
-  res.status(401).json({ message: "Session not available. Please login." })
-}
