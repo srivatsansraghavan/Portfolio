@@ -1,7 +1,7 @@
 ## Portfolio
 Welcome to my portfolio. To showcase my knowledge of Angular and NodeJS development, Caregiver Tracker has been developed locally using Visual Studio Code and hosted on Railways.
 
-[https://srivatsanssr.up.railway.app/|Portfolio URL]
+[Portfolio URL](https://srivatsanssr.up.railway.app/)
 
 ## Caregiver Tracker
 
