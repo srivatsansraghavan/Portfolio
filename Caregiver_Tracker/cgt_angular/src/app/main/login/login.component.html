@@ -84,5 +84,5 @@
           Log me In!
         </button>
     </div>
-    <span>No account created? <a (click)="openSignupModal()"> Sign up</a></span>
+    <span>No account created? <a (click)="openSignupModal()" (keydown)="openSignupModal()" (keyup.enter)="openSignupModal()" role="button" tabindex="0"> Sign up</a></span>
   </div>

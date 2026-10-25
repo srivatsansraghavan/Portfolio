@@ -196,5 +196,5 @@
           Sign me Up!
         </button>
     </div>
-    <span>Account already created? <a (click)="openLoginModal()"> Login</a></span>
+    <span>Account already created? <a (click)="openLoginModal()" (keydown)="openSignupModal()" (keyup.enter)="openSignupModal()" role="button" tabindex="0"> Login</a></span>
   </div>
