@@ -5,7 +5,7 @@ on:
     branches:
       - main
     paths:
-      - 'cgt_angular/**'
+      - './Caregiver_Tracker/cgt_angular/**'
 
 jobs:
   lint:
