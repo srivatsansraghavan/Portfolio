@@ -18,7 +18,6 @@ describe('FirstLoginComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [FirstLoginComponent],
-      imports: [],
       providers: [provideHttpClient(),
       { provide: NgbModal, useValue: mockModalService },
         FirstLoginService]

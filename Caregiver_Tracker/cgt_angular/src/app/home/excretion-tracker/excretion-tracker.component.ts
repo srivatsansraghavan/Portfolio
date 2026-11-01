@@ -16,11 +16,12 @@ import { Router } from '@angular/router';
 import { AuthService } from 'src/app/shared/auth.service';
 import { HttpResponse } from '@angular/common/http';
 import { trackedExcretionData } from './excretion-tracker.model';
+import { TrackItemsPipe } from 'src/app/shared/pipes/track-items.pipe';
 
 @Component({
   selector: 'app-excretion-tracker',
   templateUrl: './excretion-tracker.component.html',
-  providers: [ExcretionTrackerService, CommonService],
+  providers: [ExcretionTrackerService, CommonService, TrackItemsPipe],
   styleUrls: ['./excretion-tracker.component.css'],
   standalone: false,
 })

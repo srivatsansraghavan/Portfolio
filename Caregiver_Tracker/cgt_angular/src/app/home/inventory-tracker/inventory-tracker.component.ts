@@ -10,11 +10,12 @@ import * as selectors from 'src/app/store/care-taken-details/care-taken-details.
 import { AuthService } from 'src/app/shared/auth.service';
 import { Router } from '@angular/router';
 import { HttpResponse } from '@angular/common/http';
+import { TrackItemsPipe } from 'src/app/shared/pipes/track-items.pipe';
 
 @Component({
   selector: 'app-inventory-tracker',
   templateUrl: './inventory-tracker.component.html',
-  providers: [InventoryTrackerService, CommonService],
+  providers: [InventoryTrackerService, CommonService, TrackItemsPipe],
   styleUrls: ['./inventory-tracker.component.css'],
   standalone: false,
 })

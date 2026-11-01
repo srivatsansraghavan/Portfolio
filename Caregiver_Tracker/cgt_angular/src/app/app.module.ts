@@ -3,7 +3,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { provideHttpClient, withInterceptors } from '@angular/common/http';
 
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgbDatepickerModule, NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { NgbNavModule } from '@ng-bootstrap/ng-bootstrap';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HomeComponent } from './home/home.component';
@@ -49,7 +49,8 @@ import { RouterModule } from '@angular/router';
         EffectsModule.forRoot([CareTakenDetailsEffects]),
         StoreDevtoolsModule.instrument({ logOnly: environment.production }),
         SharedModule,
-        MainModule,],
+        MainModule,
+    NgbDatepickerModule],
     providers: [
         provideHttpClient(withInterceptors([(req, next) => {
             const withCredReq = req.clone({

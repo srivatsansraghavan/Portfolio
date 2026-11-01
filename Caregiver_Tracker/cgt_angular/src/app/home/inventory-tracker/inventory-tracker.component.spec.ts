@@ -3,6 +3,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { InventoryTrackerComponent } from './inventory-tracker.component';
 import { provideHttpClient } from '@angular/common/http';
 import { provideMockStore } from '@ngrx/store/testing';
+import { TrackItemsPipe } from 'src/app/shared/pipes/track-items.pipe';
 
 describe('InventoryTrackerComponent', () => {
   let component: InventoryTrackerComponent;
@@ -10,7 +11,7 @@ describe('InventoryTrackerComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [InventoryTrackerComponent],
+      declarations: [InventoryTrackerComponent, TrackItemsPipe],
       providers: [provideHttpClient(), provideMockStore()],
     })
       .compileComponents();
