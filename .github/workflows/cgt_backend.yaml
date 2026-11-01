@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: ./Web/cgt_nodejs_express
+        working-directory: ./Caregiver_Tracker/cgt_nodejs_express
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
