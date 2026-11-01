@@ -21,7 +21,7 @@ export async function addCareTaken(req: Request, res: Response, next: NextFuncti
       care_taken_added_time: moment().format("MM/DD/YYYY HH:mm:ss"),
       care_last_accessed: true,
     });
-    if (addCareTaken.hasOwnProperty("_id")) {
+    if (addCareTaken._id) {
       res.status(200).json({
         message: `Care can now be provided to ${req.body.care_taken_name}`,
         addedCareTaken: addCareTaken,

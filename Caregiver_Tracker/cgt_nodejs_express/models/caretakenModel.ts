@@ -57,13 +57,9 @@ export const firstLoginModel = async function (userEmail: string) {
   return firstTimeLogin;
 };
 
-export const addCareTakenModel = async function (careTaken: any) {
-  try {
-    const addedCareTaken = await new careTakenModel(careTaken).save();
-    return JSON.parse(JSON.stringify(addedCareTaken));
-  } catch (err) {
-    throw err;
-  }
+export const addCareTakenModel = async function (careTaken: ICareTaken) {
+  const addedCareTaken = await new careTakenModel(careTaken).save();
+  return JSON.parse(JSON.stringify(addedCareTaken));
 };
 
 export const getCareTakenDetailsModel = async function (userId: string) {

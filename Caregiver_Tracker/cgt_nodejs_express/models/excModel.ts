@@ -53,7 +53,7 @@ async function getExcModel(): Promise<ExcModel> {
   return mongoose.models['tbl_excretion'] as ExcModel || model<IExcSchema, ExcModel>('tbl_excretion', await getExcSchema());
 }
 
-export const saveTrackedExcModel = async function (query: any) {
+export const saveTrackedExcModel = async function (query: IExcSchema) {
   const excModel = await getExcModel();
   const addedExc = await new excModel(query).save();
   return JSON.parse(JSON.stringify(addedExc));

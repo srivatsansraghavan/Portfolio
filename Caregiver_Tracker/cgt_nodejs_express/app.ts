@@ -56,6 +56,7 @@ app.use(passport.initialize());
 app.use(passport.session());
 app.use(flash());
 passport.use(new LocalStrategy({ usernameField: 'user_email' }, userModel.authenticate()))
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 passport.serializeUser(userModel.serializeUser() as any);
 passport.deserializeUser(userModel.deserializeUser())
 
