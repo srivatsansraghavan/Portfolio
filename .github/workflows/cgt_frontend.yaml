@@ -4,6 +4,8 @@ on:
   push:
     branches:
       - main
+    paths:
+      - 'cgt_angular/**'
 
 jobs:
   lint:
