@@ -23,7 +23,7 @@ export interface IFeedSchema {
   feed_taken_mode: string;
   feed_taken_side: string;
   feed_taken_time: number;
-  feed_quantity: number;
+  feed_quantity?: number;
   feed_start_time: string;
   feed_end_time: string;
   is_pumped_feed: boolean;

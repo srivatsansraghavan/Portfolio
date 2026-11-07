@@ -78,7 +78,6 @@ async function getFeedSchema() {
     },
     feed_quantity: {
       type: Number,
-      required: [true, "Feed quantity is required"],
     },
     feed_start_time: {
       type: Date,
