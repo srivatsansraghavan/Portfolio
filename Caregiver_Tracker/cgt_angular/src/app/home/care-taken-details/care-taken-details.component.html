@@ -85,13 +85,15 @@
         <label for="care-taken-dob">Their Date of Birth </label>
       </div>
       <div class="col-md-6">
-        <div class="input-group">
+        <div id="care-taken-dob" class="input-group">
+          
           <input
-            class="form-control w-10"
+            class="form-control"
             ngbDatepicker
-            id="care-taken-dob"
             name="care-taken-dob"
             [(ngModel)]="careTakenDOB"
+            [minDate]="minDateDOB"
+            [maxDate]="maxDateDOB"
             #d="ngbDatepicker"
           />
           <button

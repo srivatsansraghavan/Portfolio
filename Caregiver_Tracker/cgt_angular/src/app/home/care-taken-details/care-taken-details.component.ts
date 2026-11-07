@@ -39,6 +39,16 @@ export class CareTakenDetailsComponent implements OnInit {
     'friend',
   ];
   selectedCareTaken$: Observable<careTakenDetail>;
+  minDateDOB = {
+    year: 1900,
+    month: 1,
+    day: 1,
+  };
+  maxDateDOB = {
+    year: new Date().getFullYear(),
+    month: new Date().getMonth(),
+    day: new Date().getDate(),
+  }
   constructor(
     private modal: NgbModal,
     private store: Store<{ caretakendetails: careTakenDetail[] }>,
@@ -85,11 +95,11 @@ export class CareTakenDetailsComponent implements OnInit {
   }
 
   addCareTakenOf(): void {
-    const ctDob: Date = new Date(
+    const ctDob = new Date(
       this.careTakenDOB.year,
       this.careTakenDOB.month - 1,
       this.careTakenDOB.day
-    );
+    ).toLocaleDateString();
     this.store.dispatch(
       addCareTakenPerson({
         addcaretakendetails: {
