@@ -13,6 +13,7 @@ import {
 import { careTakenDetail } from 'src/app/store/care-taken-details/care-taken-details.model';
 import * as selectors from 'src/app/store/care-taken-details/care-taken-details.selector';
 import { Router } from '@angular/router';
+import { CARE_TAKEN_ROLES } from 'src/app/shared/constants';
 
 @Component({
   selector: 'app-care-taken-details',
@@ -30,14 +31,7 @@ export class CareTakenDetailsComponent implements OnInit {
   careTakenGender: string;
   careGiver: string;
   careTakenDetails$: Observable<careTakenDetail[]>;
-  roles: string[] = [
-    'infant',
-    'toddler',
-    'child',
-    'spouse',
-    'parent',
-    'friend',
-  ];
+  roles: string[] = CARE_TAKEN_ROLES;
   selectedCareTaken$: Observable<careTakenDetail>;
   minDateDOB = {
     year: 1900,

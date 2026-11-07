@@ -50,3 +50,11 @@ export const TOTAL_FEED_SIDES = {
 export const EXCRETION_TYPES = [ExcretionTypes.Urine, ExcretionTypes.Stools, ExcretionTypes.UrineAndStools];
 export const NAPKIN_TYPES = [DiaperTypes.Diaper, DiaperTypes.Others];
 export const DIAPER_BRANDS = ['ABC', 'DEF', 'GHI', 'JKL'];
+export const CARE_TAKEN_ROLES = [
+    'infant',
+    'toddler',
+    'child',
+    'spouse',
+    'parent',
+    'friend',
+  ];
