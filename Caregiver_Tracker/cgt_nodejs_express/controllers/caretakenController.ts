@@ -6,8 +6,9 @@ import {
 } from "../models/caretakenModel.js";
 import type { NextFunction, Request, Response } from "express";
 import type { IUserSchema } from "../dto/schema.dto.js";
+import type { ICareTakenBody } from "../dto/requests.dto.js";
 
-export async function addCareTaken(req: Request<unknown, unknown, { care_taken_of: string; care_taken_name: string; care_taken_dob: string; care_taken_gender: string;}>, res: Response, next: NextFunction) {
+export async function addCareTaken(req: Request<unknown, unknown, ICareTakenBody>, res: Response, next: NextFunction) {
   try {
     const user = req.user as IUserSchema;
     const addCareTaken = await addCareTakenModel({

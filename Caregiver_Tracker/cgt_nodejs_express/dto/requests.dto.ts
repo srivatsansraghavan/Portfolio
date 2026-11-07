@@ -33,3 +33,11 @@ export const medicationSchema = z.object({
 
 export type IMedicationBody = z.infer<typeof medicationSchema>;
 
+export const careTakenSchema = z.object({
+    care_taken_of: z.string(),
+    care_taken_name: z.string(),
+    care_taken_dob: z.string(),
+    care_taken_gender: z.string(),
+});
+
+export type ICareTakenBody = z.infer<typeof careTakenSchema>;

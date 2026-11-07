@@ -5,7 +5,7 @@ on:
     branches:
       - main
     paths:
-      - './Caregiver_Tracker/cgt_nodejs_express/**'
+      - 'Caregiver_Tracker/cgt_nodejs_express/**'
 
 jobs:
   lint:
