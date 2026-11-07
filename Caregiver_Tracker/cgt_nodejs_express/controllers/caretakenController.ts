@@ -7,15 +7,15 @@ import {
 import type { NextFunction, Request, Response } from "express";
 import type { IUserSchema } from "../dto/schema.dto.js";
 
-export async function addCareTaken(req: Request, res: Response, next: NextFunction) {
+export async function addCareTaken(req: Request<unknown, unknown, { care_taken_of: string; care_taken_name: string; care_taken_dob: string; care_taken_gender: string;}>, res: Response, next: NextFunction) {
   try {
     const user = req.user as IUserSchema;
     const addCareTaken = await addCareTakenModel({
       care_giver: user.user_email,
       care_taken_of: req.body.care_taken_of,
       care_taken_name: req.body.care_taken_name,
-      care_taken_dob: moment(req.body.care_taken_dob, "DD/MM/YYYY HH:mm:ss").format(
-        "MM/DD/YYYY HH:mm:ss"
+      care_taken_dob: moment(req.body.care_taken_dob, "MM/DD/YYYY").format(
+        "DD/MM/YYYY"
       ),
       care_taken_gender: req.body.care_taken_gender,
       care_taken_added_time: moment().format("MM/DD/YYYY HH:mm:ss"),
