@@ -4,6 +4,7 @@ import { map, Observable } from 'rxjs';
 import { careTakenDetail } from 'src/app/store/care-taken-details/care-taken-details.model';
 import { environment } from 'src/environments/environment';
 import { medicationData, trackedMedicationData } from './medication-tracker.model';
+import moment from 'moment';
 
 @Injectable({
   providedIn: 'root',
@@ -30,10 +31,10 @@ export class MedicationTrackerService {
             responseDetails['medicineForm'] = responseItem.medicine_form;
             responseDetails['medicineQuantity'] =
               responseItem.medicine_quantity;
-            const endDate = responseItem.medication_time.split('T')[0];
-            responseDetails['medicationTime'] = new Date(
+            const endDate = moment(responseItem.medication_time).format('YYYY-MM-DD');
+            responseDetails['medicationTime'] = moment(
               responseItem.medication_time
-            ).toLocaleString();
+            ).format('HH:mm:ss');
             if (!medicationGrouped[endDate]) {
               medicationGrouped[endDate] = [];
             }

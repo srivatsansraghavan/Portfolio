@@ -1,5 +1,6 @@
 import { HttpClient, HttpResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import moment from 'moment';
 import { map, Observable } from 'rxjs';
 import { inventoryData } from 'src/app/shared/common.service';
 import { careTakenDetail } from 'src/app/store/care-taken-details/care-taken-details.model';
@@ -25,10 +26,10 @@ export class InventoryTrackerService {
           const inventoryGrouped = {};
           for (const responseItem of response.body) {
             const responseDetails = {};
-            const addedDate = responseItem.addedTime.split('T')[0];
-            responseDetails['addedTime'] = new Date(
+            const addedDate = moment(responseItem.addedTime).format('YYYY-MM-DD');
+            responseDetails['addedTime'] = moment(
               responseItem.addedTime
-            ).toLocaleString();
+            ).format('HH:mm:ss');
             responseDetails['addedDate'] = addedDate;
             if (!inventoryGrouped[addedDate]) {
               inventoryGrouped[addedDate] = [];

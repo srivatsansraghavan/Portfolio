@@ -5,6 +5,7 @@ import moment from 'moment';
 export class DateDiffPipe implements PipeTransform {
   transform(pipeValue: string) {
     if (!pipeValue) return [];
-    return moment(pipeValue, 'YYYY-MM-DD').fromNow();
+    console.log(pipeValue)
+    return moment().calendar(pipeValue, { sameDay: '[Today]', lastDay: '[Yesterday]', lastWeek: '[Last Week]' });
   }
 }
