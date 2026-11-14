@@ -1,0 +1,89 @@
+.pumping-container {
+    display: block;
+    margin-top: 2%;
+    margin-left: 5%;
+    margin-bottom: 3%;
+    min-width: 800px;
+    min-height: 600px;
+    width: 60%;
+    height: 90%;
+    overflow: hidden;
+}
+
+.btn-add-pumped {
+    text-align: center;
+    align-self: center;
+    margin: 3%;
+}
+
+.modal-footer {
+    justify-content: center;
+}
+
+ul {
+    padding: 0;
+}
+
+.pumped-per-date {
+    list-style-type: none;
+    padding-bottom: 1%;
+    display: block;
+    border-bottom: 1px dotted;
+}
+
+.pumped-date {
+    display: flex;
+    justify-content: center;
+    padding-bottom: 2%;
+    font-size: large;
+    font-weight: 400;
+
+}
+
+.tracked-pumped-timeline {
+    list-style-type: none;
+    height: 100%;
+    display: flex;
+    flex-direction: row;
+}
+
+.tracked-pumped {
+    border: 1px solid #ccc;
+    background-color: snow;
+    height: 70px;
+    width: 100%;
+    padding: 2.5%;
+}
+
+.pumped-feed-timeline {
+    list-style-type: none;
+    padding-left: 5%;
+    height: 100%;
+}
+
+.pumped-feed {
+    border: 1px solid #ccc;
+    background-color: snow;
+    display: inline-block;
+    height: 70px;
+    width: 100%;
+    padding: 2.5%;
+}
+
+.btn-edit-tracked-feed {
+    background-color: green;
+    border: 0 transparent;
+    width: 10%;
+    height: 70px;
+}
+
+.btn-delete-tracked-feed {
+    background-color: red;
+    border: 0 transparent;
+    width: 10%;
+    height: 70px;
+}
+
+#spinner {
+    margin: 20 auto;
+}

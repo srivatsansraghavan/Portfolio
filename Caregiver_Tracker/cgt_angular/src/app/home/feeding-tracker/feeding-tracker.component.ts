@@ -22,9 +22,10 @@ import * as selectors from 'src/app/store/care-taken-details/care-taken-details.
 import { Router } from '@angular/router';
 import { TOTAL_FEED_MODES, TOTAL_FEED_SIDES, TOTAL_FEED_TYPES } from 'src/app/shared/constants';
 import { AuthService } from 'src/app/shared/auth.service';
-import { FeedGrouped, FeedGroupedByDate, isFeedGrouped, PumpedGrouped, trackedFeedsData } from './feeding-tracker.model';
+import { FeedGrouped, FeedGroupedByDate, isFeedGrouped, trackedFeedsData } from './feeding-tracker.model';
 import { CareTakenTypes, FeedModes, FeedTypes, TrackState } from 'src/app/shared/enums';
 import { HttpResponse } from '@angular/common/http';
+import { PumpedGrouped } from '../pumping-tracker/pumping-tracker.model';
 
 @Component({
   selector: 'app-feeding-tracker',
@@ -179,7 +180,8 @@ export class FeedingTrackerComponent implements OnInit {
     this.ftService
       .savePumpingFeed(
         this.careGiver,
-        this.selCareTaken,
+        this.selCareTaken._id,
+        this.selCareTaken.care_taken_name,
         this.chosenFeedType,
         this.chosenFeedMode,
         this.chosenFeedSide,

@@ -24,6 +24,7 @@ import { AppComponent } from './app.component';
 import { SharedModule } from './shared/shared.module';
 import { MainModule } from './main/main.module';
 import { RouterModule } from '@angular/router';
+import { PumpingTrackerComponent } from './home/pumping-tracker/pumping-tracker.component';
 
 @NgModule({
     declarations: [
@@ -31,6 +32,7 @@ import { RouterModule } from '@angular/router';
         HomeComponent,
         FirstLoginComponent,
         FeedingTrackerComponent,
+        PumpingTrackerComponent,
         ExcretionTrackerComponent,
         MedicationTrackerComponent,
         InventoryTrackerComponent,

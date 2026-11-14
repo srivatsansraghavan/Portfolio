@@ -12,18 +12,24 @@
           </ng-template>
         </li>
         <li [ngbNavItem]="2">
+          <a ngbNavLink> Pumping </a>
+          <ng-template ngbNavContent>
+            <app-pumping-tracker></app-pumping-tracker>
+          </ng-template>
+        </li>
+        <li [ngbNavItem]="3">
           <a ngbNavLink> Excretions </a>
           <ng-template ngbNavContent>
             <app-excretion-tracker></app-excretion-tracker>
           </ng-template>
         </li>
-        <li [ngbNavItem]="3">
+        <li [ngbNavItem]="4">
           <a ngbNavLink> Medications </a>
           <ng-template ngbNavContent>
             <app-medication-tracker></app-medication-tracker>
           </ng-template>
         </li>
-        <li [ngbNavItem]="4">
+        <li [ngbNavItem]="5">
           <a ngbNavLink> Inventory </a>
           <ng-template ngbNavContent>
             <app-inventory-tracker></app-inventory-tracker>

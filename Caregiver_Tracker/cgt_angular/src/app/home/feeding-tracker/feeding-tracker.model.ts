@@ -1,3 +1,5 @@
+import { PumpedGrouped } from "../pumping-tracker/pumping-tracker.model";
+
 export interface Feeds {
   _id: string;
   feed_taken_type: string;
@@ -17,18 +19,6 @@ export interface Feeds {
   pumped_time: string;
 }
 
-export interface PumpedGrouped {
-  id: string;
-  pumpedMode: string;
-  pumpedSide: string;
-  pumpedQuantity: number;
-  pumpedStartDate: string;
-  pumpedStartTime: string;
-  pumpedEndDate: string;
-  pumpedEndTime: string;
-  pumpedTimeTaken: string;
-}
-
 export interface FeedGrouped {
   id: string;
   type: string;
@@ -42,7 +32,7 @@ export interface FeedGrouped {
   timeTaken: string;
 }
 
-export type FeedGroupedByDate = Record<string, (FeedGrouped | PumpedGrouped)[]>;
+export type FeedGroupedByDate = Record<string, FeedGrouped[]>;
 
 interface CareTakenDetail {
   _id: string;

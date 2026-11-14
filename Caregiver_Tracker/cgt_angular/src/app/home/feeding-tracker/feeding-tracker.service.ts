@@ -4,8 +4,9 @@ import { map, Observable } from 'rxjs';
 import { TimerService } from 'src/app/shared/timer/timer.service';
 import { careTakenDetail } from 'src/app/store/care-taken-details/care-taken-details.model';
 import { environment } from 'src/environments/environment';
-import { FeedGrouped, FeedGroupedByDate, Feeds, PumpedGrouped } from './feeding-tracker.model';
+import { FeedGrouped, FeedGroupedByDate, Feeds } from './feeding-tracker.model';
 import moment from 'moment';
+import { PumpedGrouped } from '../pumping-tracker/pumping-tracker.model';
 
 @Injectable()
 export class FeedingTrackerService {
@@ -51,7 +52,8 @@ export class FeedingTrackerService {
 
   savePumpingFeed(
     feedGiver: string,
-    feedTaker: object,
+    feedTakerId: string,
+    feedTakerName: string,
     feedType: string,
     feedMode: string,
     feedSide: string,
@@ -62,7 +64,10 @@ export class FeedingTrackerService {
       `${environment.expressURL}/feed/save-pumping-feed`,
       {
         feedGiver,
-        feedTaker,
+        feedTaker: {
+          id: feedTakerId,
+          name: feedTakerName,
+        },
         feedType,
         feedMode,
         feedSide,
@@ -86,38 +91,22 @@ export class FeedingTrackerService {
         map((response: Feeds[]) => {
           const feedGrouped: FeedGroupedByDate = {};
           for (const responseItem of response) {
-            let responseDetails: FeedGrouped | PumpedGrouped;
+            let responseDetails: FeedGrouped;
             let endDate: string;
             const { _id: id } = responseItem;
-            if (responseItem.pumped_mode !== undefined) {
-              const { pump_end_time, pump_start_time, pumped_mode, pumped_side, pumped_quantity, pumped_time } = responseItem;
-              endDate = moment(pump_end_time).format('YYYY-MM-DD');
-              responseDetails = {
-                id,
-                pumpedMode: pumped_mode,
-                pumpedSide: pumped_side,
-                pumpedQuantity: pumped_quantity,
-                pumpedStartDate: moment(pump_start_time).format('YYYY-MM-DD'),
-                pumpedStartTime: moment(pump_start_time).format('HH:mm:ss'),
-                pumpedEndDate: endDate,
-                pumpedEndTime: moment(pump_end_time).format('HH:mm:ss'),
-                pumpedTimeTaken: pumped_time,
-              }
-            } else {
-              const { feed_taken_type, feed_taken_mode, feed_taken_side, feed_quantity, feed_end_time, feed_start_time, feed_taken_time } = responseItem;
-              endDate = moment(feed_end_time).format('YYYY-MM-DD');
-              responseDetails = {
-                id,
-                type: feed_taken_type,
-                mode: feed_taken_mode,
-                side: feed_taken_side,
-                quantity: feed_quantity,
-                startDate: moment(feed_start_time).format('YYYY-MM-DD'),
-                startTime: moment(feed_start_time).format('HH:mm:ss'),
-                endDate,
-                endTime: moment(feed_end_time).format('HH:mm:ss'),
-                timeTaken: feed_taken_time,
-              }
+            const { feed_taken_type, feed_taken_mode, feed_taken_side, feed_quantity, feed_end_time, feed_start_time, feed_taken_time } = responseItem;
+            endDate = moment(feed_end_time).format('YYYY-MM-DD');
+            responseDetails = {
+              id,
+              type: feed_taken_type,
+              mode: feed_taken_mode,
+              side: feed_taken_side,
+              quantity: feed_quantity,
+              startDate: moment(feed_start_time).format('YYYY-MM-DD'),
+              startTime: moment(feed_start_time).format('HH:mm:ss'),
+              endDate,
+              endTime: moment(feed_end_time).format('HH:mm:ss'),
+              timeTaken: feed_taken_time,
             }
             if (!feedGrouped[endDate]) {
               feedGrouped[endDate] = [];
