@@ -2,9 +2,7 @@ import moment from "moment";
 import {
   saveTrackedFeedModel,
   saveFeedForPumpedModel,
-  savePumpedModel,
   getFeedDetailsModel,
-  getPumpedDetailsModel,
   deleteTrackedFeedModel,
   getFeedByIdModel,
   saveEditedFeedModel,
@@ -61,41 +59,6 @@ export async function saveTrackingFeed(req: Request<unknown, unknown, IFeedBody,
   }
 }
 
-export async function savePumpingFeed(req: Request<unknown, unknown, IFeedBody>, res: Response, next: NextFunction) {
-  try {
-    const user = req.user as IUserSchema;
-    const feedEndTime = moment().format("MM/DD/YYYY HH:mm:ss");
-    const feedStartTime = moment(feedEndTime, "MM/DD/YYYY HH:mm:ss")
-      .subtract(req.body.feedTime, "seconds")
-      .format("MM/DD/YYYY HH:mm:ss");
-    const insertQuery = {
-      pumped_by: user.user_email,
-      pumped_for_name: req.body.feedTaker.name,
-      pumped_for_id: req.body.feedTaker.id,
-      pumped_mode: req.body.feedMode,
-      pumped_side: req.body.feedSide,
-      pumped_time: req.body.feedTime,
-      pumped_quantity: req.body.feedQuantity,
-      pump_start_time: feedStartTime,
-      pump_end_time: feedEndTime,
-      is_pumped_feed: true,
-      is_feed_given: false,
-    };
-    const addPumpedFeed = await savePumpedModel(insertQuery);
-    if (addPumpedFeed._id) {
-      res
-        .status(200)
-        .json({ message: `Pumping for ${req.body.feedTaker.name} completed!` });
-    } else {
-      res
-        .status(404)
-        .json({ message: "Unable to add tracked pumping. Please try later!" });
-    }
-  } catch (err) {
-    return next(err);
-  }
-}
-
 export async function getFeedDetails(req: Request<unknown, unknown, unknown, { feed_taker?: string; feed_count?: number; }>, res: Response, next: NextFunction) {
   try {
     const user = req.user as IUserSchema;
@@ -108,18 +71,6 @@ export async function getFeedDetails(req: Request<unknown, unknown, unknown, { f
       req.query.feed_count!
     );
     res.status(200).json(getFeedDetails);
-  } catch (err) {
-    return next(err);
-  }
-}
-
-export async function getPumpedFeed(req: Request<unknown, unknown, unknown, { feed_giver: string; feed_taker: string;}>, res: Response, next: NextFunction) {
-  try {
-    const getPumpedFeed = await getPumpedDetailsModel(
-      req.query.feed_giver,
-      req.query.feed_taker
-    );
-    res.status(200).json(getPumpedFeed);
   } catch (err) {
     return next(err);
   }

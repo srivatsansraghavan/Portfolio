@@ -63,6 +63,7 @@ passport.deserializeUser(userModel.deserializeUser())
 import user from "./routes/user.js";
 import caretaken from "./routes/caretaken.js";
 import feed from "./routes/feed.js";
+import pumped from "./routes/pumped.js";
 import excretion from "./routes/excretion.js";
 import inventory from "./routes/inventory.js";
 import medication from "./routes/medication.js";
@@ -72,6 +73,7 @@ import base from "./routes/base.js";
 app.use("/user", user);
 app.use("/caretaken", caretaken);
 app.use("/feed", feed);
+app.use("/pumped", pumped);
 app.use("/excretion", excretion);
 app.use("/inventory", inventory);
 app.use("/medication", medication);

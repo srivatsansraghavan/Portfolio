@@ -23,6 +23,7 @@ export async function addCareTaken(req: Request<unknown, unknown, ICareTakenBody
       care_last_accessed: true,
     });
     if (addCareTaken._id) {
+      await changeCareTakenModel(addCareTaken._id, user.user_email);
       res.status(200).json({
         message: `Care can now be provided to ${req.body.care_taken_name}`,
         addedCareTaken: addCareTaken,
@@ -56,6 +57,10 @@ export async function changeCareTaken(req: Request, res: Response, next: NextFun
       req.body.care_taken_id,
       user.user_email
     );
+    if(!changeCareTaken) {
+      res.status(409).json({ message: 'Cannot change to active care taken' });
+      return;
+    }
     res.status(200).json(changeCareTaken);
   } catch (err) {
     return next(err);
