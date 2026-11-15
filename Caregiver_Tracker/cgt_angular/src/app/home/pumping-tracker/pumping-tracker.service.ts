@@ -2,7 +2,6 @@ import { HttpClient, HttpResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { map, Observable } from 'rxjs';
 import { TimerService } from 'src/app/shared/timer/timer.service';
-import { careTakenDetail } from 'src/app/store/care-taken-details/care-taken-details.model';
 import { environment } from 'src/environments/environment';
 import { PumpedGrouped, PumpedGroupedByDate } from './pumping-tracker.model';
 import moment from 'moment';
@@ -25,7 +24,6 @@ export class PumpingTrackerService {
     feedGiver: string,
     feedTakerId: string,
     feedTakerName: string,
-    feedType: string,
     feedMode: string,
     feedSide: string,
     feedTime: number,
@@ -39,7 +37,6 @@ export class PumpingTrackerService {
           id: feedTakerId,
           name: feedTakerName,
         },
-        feedType,
         feedMode,
         feedSide,
         feedTime,
@@ -62,12 +59,10 @@ export class PumpingTrackerService {
         map((response: Feeds[]) => {
           const pumpedGrouped: PumpedGroupedByDate = {};
           for (const responseItem of response) {
-            let responseDetails: PumpedGrouped;
-            let endDate: string;
             const { _id: id } = responseItem;
             const { pump_end_time, pump_start_time, pumped_mode, pumped_side, pumped_quantity, pumped_time } = responseItem;
-            endDate = moment(pump_end_time).format('YYYY-MM-DD');
-            responseDetails = {
+            const endDate = moment(pump_end_time).format('YYYY-MM-DD');
+            const responseDetails: PumpedGrouped = {
               id,
               pumpedMode: pumped_mode,
               pumpedSide: pumped_side,

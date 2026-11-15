@@ -4,7 +4,7 @@ import { map, Observable } from 'rxjs';
 import { TimerService } from 'src/app/shared/timer/timer.service';
 import { careTakenDetail } from 'src/app/store/care-taken-details/care-taken-details.model';
 import { environment } from 'src/environments/environment';
-import { FeedGrouped, FeedGroupedByDate, Feeds } from './feeding-tracker.model';
+import { FeedGroupedByDate, Feeds } from './feeding-tracker.model';
 import moment from 'moment';
 import { PumpedGrouped } from '../pumping-tracker/pumping-tracker.model';
 
@@ -91,12 +91,10 @@ export class FeedingTrackerService {
         map((response: Feeds[]) => {
           const feedGrouped: FeedGroupedByDate = {};
           for (const responseItem of response) {
-            let responseDetails: FeedGrouped;
-            let endDate: string;
             const { _id: id } = responseItem;
             const { feed_taken_type, feed_taken_mode, feed_taken_side, feed_quantity, feed_end_time, feed_start_time, feed_taken_time } = responseItem;
-            endDate = moment(feed_end_time).format('YYYY-MM-DD');
-            responseDetails = {
+            const endDate = moment(feed_end_time).format('YYYY-MM-DD');
+            const responseDetails = {
               id,
               type: feed_taken_type,
               mode: feed_taken_mode,

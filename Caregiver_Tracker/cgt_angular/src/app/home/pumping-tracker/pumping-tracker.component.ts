@@ -6,9 +6,6 @@ import moment from 'moment';
 import { Observable, filter, take } from 'rxjs';
 import {
   CommonService,
-  feedTypeOptions,
-  feedModeOptions,
-  feedSideOptions,
 } from 'src/app/shared/common.service';
 import { careTakenDetail } from 'src/app/store/care-taken-details/care-taken-details.model';
 import { ToastService } from 'src/app/shared/toast/toast.service';
@@ -19,10 +16,10 @@ import { addFeedAnimation } from 'src/app/shared/animations';
 import { Store, select } from '@ngrx/store';
 import * as selectors from 'src/app/store/care-taken-details/care-taken-details.selector';
 import { Router } from '@angular/router';
-import { TOTAL_FEED_MODES, TOTAL_FEED_SIDES, TOTAL_FEED_TYPES } from 'src/app/shared/constants';
+import { PUMP_MODE, PUMP_SIDES } from 'src/app/shared/constants';
 import { AuthService } from 'src/app/shared/auth.service';
-import { FeedGrouped, FeedGroupedByDate, isFeedGrouped, trackedFeedsData } from 'src/app/home/feeding-tracker/feeding-tracker.model';
-import { CareTakenTypes, FeedModes, FeedTypes, TrackState } from 'src/app/shared/enums';
+import { isFeedGrouped, trackedFeedsData } from 'src/app/home/feeding-tracker/feeding-tracker.model';
+import { TrackState } from 'src/app/shared/enums';
 import { HttpResponse } from '@angular/common/http';
 import { PumpedGrouped, PumpedGroupedByDate } from './pumping-tracker.model';
 import { PumpingTrackerService } from './pumping-tracker.service';
@@ -38,16 +35,13 @@ import { PumpingTrackerService } from './pumping-tracker.service';
 export class PumpingTrackerComponent implements OnInit {
   careTakenName: string;
   careGiver: string;
-  chosenFeedType: string;
-  chosenFeedMode: string;
-  chosenFeedSide: string;
+  chosenPumpMode: string;
+  chosenPumpSide: string;
   chosenPumpedFeed: string;
-  totalFeedTypes: feedTypeOptions = TOTAL_FEED_TYPES;
-  feedTypes: string[];
-  totalFeedModes: feedModeOptions = TOTAL_FEED_MODES;
-  feedModes: string[];
-  totalFeedSides: feedSideOptions = TOTAL_FEED_SIDES;
-  feedSides: string[];
+  totalPumpModes: string[] = PUMP_MODE;
+  pumpModes: string[];
+  totalPumpSides: string[] = PUMP_SIDES;
+  pumpSides: string[];
   pumpedFeeds: PumpedGrouped[];
   trackState: TrackState = TrackState.Start;
   trackerInterval: NodeJS.Timeout;
@@ -112,7 +106,6 @@ export class PumpingTrackerComponent implements OnInit {
   }
 
   addPumped(add_pumped_modal: TemplateRef<null>): void {
-    this.feedTypes = this.totalFeedTypes[this.selCareTaken.care_taken_of];
     this.modal.open(add_pumped_modal, {
       backdrop: 'static',
       keyboard: false,
@@ -120,31 +113,19 @@ export class PumpingTrackerComponent implements OnInit {
     });
   }
 
-  onFeedTypeChosen(event: Event) {
-    this.chosenFeedType = (event.target as HTMLSelectElement).value;
-    this.feedModes = this.totalFeedModes[this.chosenFeedType];
-    this.feedSides = this.totalFeedSides[this.chosenFeedType];
-      this.disableTracking = true;
-      this.needQuantity = false;
+  onPumpModeChosen(event: Event) {
+    this.chosenPumpMode = (event.target as HTMLSelectElement).value;
+    this.pumpSides = this.totalPumpSides;
+    this.disableTracking = false;
+    this.needQuantity = true;
   }
 
-  onFeedModeChosen(event: Event) {
-    this.chosenFeedMode = (event.target as HTMLSelectElement).value;
-    if (this.chosenFeedType === FeedTypes.BreastPump) {
-      this.disableTracking = true;
-      this.needQuantity = true;
-    } else {
-      this.disableTracking = false;
-      this.needQuantity = true;
-    }
-  }
-
-  onFeedSideChosen(event: Event) {
-    this.chosenFeedSide = (event.target as HTMLSelectElement).value;
+  onPumpSideChosen(event: Event) {
+    this.chosenPumpSide = (event.target as HTMLSelectElement).value;
     this.disableTracking = false;
   }
 
-  trackFeedTime(): void {
+  trackPumpTime(): void {
     if (this.trackState !== TrackState.Stop) {
       this.trackerInterval = this.ptService.startTracking();
       this.trackState = TrackState.Stop;
@@ -161,9 +142,8 @@ export class PumpingTrackerComponent implements OnInit {
         this.careGiver,
         this.selCareTaken._id,
         this.selCareTaken.care_taken_name,
-        this.chosenFeedType,
-        this.chosenFeedMode,
-        this.chosenFeedSide,
+        this.chosenPumpMode,
+        this.chosenPumpSide,
         this.feedTimeTaken,
         this.feedQuantity
       )
@@ -175,7 +155,7 @@ export class PumpingTrackerComponent implements OnInit {
             'bg-success text-light',
             true
           );
-          this.cancelTrackingFeed();
+          this.cancelTrackingPumped();
           this.getPumpeds();
         },
         error: (response: HttpResponse<{ message: string }>) => {
@@ -190,25 +170,24 @@ export class PumpingTrackerComponent implements OnInit {
       });
   }
 
-  cancelTrackingFeed() {
+  cancelTrackingPumped() {
     this.modal.dismissAll();
     this.trackState = TrackState.Start;
     this.feedTimeTaken = 0;
     this.disableTracking = true;
     this.needQuantity = false;
-    this.chosenFeedType = '';
-    this.chosenFeedMode = '';
-    this.chosenFeedSide = '';
+    this.chosenPumpMode = '';
+    this.chosenPumpSide = '';
     this.trackerInterval = null;
     this.feedQuantity = 0;
   }
 
-  editTrackedFeedModal(edit_feed_modal: TemplateRef<null>, feedId: string) {
+  editTrackedPumpedModal(edit_pumped_modal: TemplateRef<null>, feedId: string) {
     this.ptService.getPumpedForId(feedId).subscribe({
       next: (feedData: trackedFeedsData) => {
         console.log('feedData', feedData);
         this.editFeedData = feedData;
-        this.modal.open(edit_feed_modal, {
+        this.modal.open(edit_pumped_modal, {
           backdrop: 'static',
           keyboard: false,
           size: 'lg',
@@ -216,8 +195,8 @@ export class PumpingTrackerComponent implements OnInit {
       },
       error: () => {
         this.toastService.show(
-          'Edit Feed',
-          'Unable to fetch feed data. Please try again!',
+          'Edit Pumped',
+          'Unable to fetch pumped data. Please try again!',
           'bg-error text-light',
           true
         );
@@ -225,8 +204,8 @@ export class PumpingTrackerComponent implements OnInit {
     });
   }
 
-  deleteTrackedFeedModal(delete_feed_modal: TemplateRef<null>, feedId: string) {
-    this.modal.open(delete_feed_modal, {
+  deleteTrackedPumpedModal(delete_pumped_modal: TemplateRef<null>, feedId: string) {
+    this.modal.open(delete_pumped_modal, {
       backdrop: 'static',
       keyboard: false,
       size: 'md',
@@ -234,11 +213,11 @@ export class PumpingTrackerComponent implements OnInit {
     this.deleteFeedId = feedId;
   }
 
-  deleteTrackedFeed(feedId: string) {
+  deleteTrackedPumped(feedId: string) {
     this.ptService.deletePumped(feedId).subscribe({
       next: (response: { message: string }) => {
         this.toastService.show(
-          'Delete Feed',
+          'Delete Pumped',
           response.message,
           'bg-success text-light',
           true
@@ -248,7 +227,7 @@ export class PumpingTrackerComponent implements OnInit {
       },
       error: (response: { message: string }) => {
         this.toastService.show(
-          'Delete Feed',
+          'Delete Pumped',
           response.message,
           'bg-error text-light',
           true
@@ -258,11 +237,11 @@ export class PumpingTrackerComponent implements OnInit {
     });
   }
 
-  cancelDeleteTrackedFeed() {
+  cancelDeleteTrackedPumped() {
     this.modal.dismissAll();
   }
 
-  editTrackedFeed(editedData: trackedFeedsData) {
+  editTrackedPumped(editedData: trackedFeedsData) {
     const { startDate, endDate, startTime, endTime } = editedData;
     const startDateString = moment({
       year: startDate.year,
@@ -285,7 +264,7 @@ export class PumpingTrackerComponent implements OnInit {
       .subscribe({
         next: (response: HttpResponse<{ message: string }>) => {
           this.toastService.show(
-            'Edit Feed',
+            'Edit Pumped',
             response.body.message,
             'bg-success text-light',
             true
@@ -295,7 +274,7 @@ export class PumpingTrackerComponent implements OnInit {
         },
         error: (response: HttpResponse<{ message: string }>) => {
           this.toastService.show(
-            'Edit Feed',
+            'Edit Pumped',
             response.body.message,
             'bg-danger text-light',
             true
@@ -305,7 +284,7 @@ export class PumpingTrackerComponent implements OnInit {
       });
   }
 
-  cancelEditTrackedFeed() {
+  cancelEditTrackedPumped() {
     this.modal.dismissAll();
   }
 }

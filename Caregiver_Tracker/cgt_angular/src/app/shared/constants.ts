@@ -1,8 +1,7 @@
-import { CareTakenTypes, DiaperTypes, ExcretionTypes, FeedModes, FeedSides, FeedTypes } from "./enums";
+import { CareTakenTypes, DiaperTypes, ExcretionTypes, FeedModes, FeedSides, FeedTypes, PumpModes, PumpSides } from "./enums";
 
 export const TOTAL_FEED_TYPES = {
     [CareTakenTypes.Infant]: [
-        FeedTypes.BreastPump,
         FeedTypes.BreastMilk,
         FeedTypes.FormulaFeeding,
         FeedTypes.MashedFood,
@@ -11,7 +10,6 @@ export const TOTAL_FEED_TYPES = {
         FeedTypes.Drips,
     ],
     [CareTakenTypes.Toddler]: [
-        FeedTypes.BreastPump,
         FeedTypes.BreastMilk,
         FeedTypes.FormulaFeeding,
         FeedTypes.NormalFood,
@@ -32,8 +30,8 @@ export const TOTAL_FEED_TYPES = {
     [CareTakenTypes.Parent]: [FeedTypes.NormalFood, FeedTypes.MashedFood, FeedTypes.Juices, FeedTypes.Water, FeedTypes.Drips],
     [CareTakenTypes.Friend]: [FeedTypes.NormalFood, FeedTypes.MashedFood, FeedTypes.Juices, FeedTypes.Water, FeedTypes.Drips],
 };
+export const PUMP_MODE = [PumpModes.ManualPump, PumpModes.ElectricalPump];
 export const TOTAL_FEED_MODES = {
-    [FeedTypes.BreastPump]: [FeedModes.ManualPump, FeedModes.ElectricalPump],
     [FeedTypes.BreastMilk]: [FeedModes.PumpedMilk, FeedModes.DirectFeed],
     [FeedTypes.FormulaFeeding]: [FeedModes.FeedingBottle, FeedModes.Spoon, FeedModes.Other],
     [FeedTypes.NormalFood]: [FeedModes.SelfFeeding, FeedModes.OthersFeeding],
@@ -42,8 +40,8 @@ export const TOTAL_FEED_MODES = {
     [FeedTypes.Water]: [FeedModes.FeedingBottle, FeedModes.Spoon, FeedModes.Glass],
     [FeedTypes.Drips]: [],
 };
+export const PUMP_SIDES = [PumpSides.LeftBreast, PumpSides.RightBreast, PumpSides.Both]
 export const TOTAL_FEED_SIDES = {
-    [FeedTypes.BreastPump]: [FeedSides.LeftBreast, FeedSides.RightBreast, FeedSides.Both],
     [FeedTypes.BreastMilk]: [FeedSides.LeftBreast, FeedSides.RightBreast, FeedSides.Both],
 };
 

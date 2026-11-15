@@ -20,7 +20,6 @@ export interface feedTypeOptions {
 }
 
 export interface feedModeOptions {
-  'Breast Pump': string[];
   'Breast Milk': string[];
   'Formula feeding': string[];
   'Normal food': string[];
@@ -31,7 +30,6 @@ export interface feedModeOptions {
 }
 
 export interface feedSideOptions {
-  'Breast Pump': string[];
   'Breast Milk': string[];
 }
 

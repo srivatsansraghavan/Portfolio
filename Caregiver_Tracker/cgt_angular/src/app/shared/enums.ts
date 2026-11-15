@@ -10,8 +10,6 @@ export enum FeedTypes {
 }
 
 export enum FeedModes {
-    ManualPump = 'Manual Pump',
-    ElectricalPump = 'Electrical Pump',
     PumpedMilk = 'Pumped Milk',
     DirectFeed = 'Direct Feed',
     FeedingBottle = 'Feeding bottle',
@@ -22,7 +20,18 @@ export enum FeedModes {
     Other = 'Other',
 }
 
+export enum PumpModes {
+    ManualPump = 'Manual Pump',
+    ElectricalPump = 'Electrical Pump',
+}
+
 export enum FeedSides {
+    LeftBreast = 'Left Breast',
+    RightBreast = 'Right Breast',
+    Both = 'Both',
+}
+
+export enum PumpSides {
     LeftBreast = 'Left Breast',
     RightBreast = 'Right Breast',
     Both = 'Both',
