@@ -50,7 +50,7 @@ export interface IExcSchema {
   napkin_type: string;
   diaper_count: number;
   diaper_brand: string;
-  excretion_time: Date;
+  excretion_time: string;
 }
 
 export interface IMedicationSchema {
