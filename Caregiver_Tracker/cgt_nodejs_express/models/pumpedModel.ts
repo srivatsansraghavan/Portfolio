@@ -1,6 +1,6 @@
 import mongoose, { model, type Mongoose, type PassportLocalDocument, type PassportLocalModel, type PassportLocalSchema, type RootFilterQuery } from "mongoose";
 import { connectToMongoDB, cgtdbEnv } from "../config.js";
-import type { IFeedSchema, IPumpedSchema } from "../dto/schema.dto.js";
+import type { IPumpedSchema } from "../dto/schema.dto.js";
 
 export interface IPumpedResponse {
   _id: string;
